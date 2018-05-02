@@ -16,14 +16,10 @@
   "bugs": {
     "url": "https://github.com/Skrys33/JustTakeIt/issues"
   },
-<<<<<<< HEAD
-  "homepage": "https://github.com/Skrys33/JustTakeIt#readme"
-}
-=======
   "homepage": "https://github.com/Skrys33/JustTakeIt#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "ioredis": "^3.2.2",
     "mongodb": "^3.0.7"
   }
 }
->>>>>>> 30519f97b5d9d579db368d2281fedbd3336a9149

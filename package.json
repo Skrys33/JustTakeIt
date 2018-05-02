@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/Skrys33/JustTakeIt/issues"
   },
+<<<<<<< HEAD
   "homepage": "https://github.com/Skrys33/JustTakeIt#readme"
 }
+=======
+  "homepage": "https://github.com/Skrys33/JustTakeIt#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongodb": "^3.0.7"
+  }
+}
+>>>>>>> 30519f97b5d9d579db368d2281fedbd3336a9149

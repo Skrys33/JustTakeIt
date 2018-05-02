@@ -1,4 +1,4 @@
-const Users = require("../modele/user")
+const Users = require("../models/user")
 const router = require('express').Router()
 
 function checkSignIn(req, res) {

@@ -2,18 +2,17 @@ const request = require('request')
 
 class Api {
     
-    static callApi(url){
-        request(url, function (error, response, body) {
-            
+    static callApi(param){
+        request('http://api.allocine.fr/rest/v3/'+param, function (error, response, body) {            
             if (!error) {
-                console.log(body)
+                return body
             }else{
-                console.log(error)                
+                return error                
             }
         })
     }
 }
 
-Api.callApi('http://api.allocine.fr/rest/v3/search?partner=QUNXZWItQWxsb0Npbuk&filter=movie,theater,person,news,tvseries&count=5&page=1&q=avatar&format=json')
+Api.callApi('search?partner=QUNXZWItQWxsb0Npbuk&q=avatar&format=json')
 
 module.exports = Api

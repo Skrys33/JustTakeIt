@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,15 @@
   "bugs": {
     "url": "https://github.com/Skrys33/JustTakeIt/issues"
   },
-  "homepage": "https://github.com/Skrys33/JustTakeIt#readme"
+  "homepage": "https://github.com/Skrys33/JustTakeIt#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "https": "^1.0.0",
+    "ioredis": "^3.2.2",
+    "mongodb": "^3.0.7",
+    "mongoose": "^5.1.0",
+    "path": "^0.12.7",
+    "twig": "^1.11.0"
+  }
 }

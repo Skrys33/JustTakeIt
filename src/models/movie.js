@@ -9,7 +9,7 @@ class Movie {
 
     static findOne(){}
 
-    static findAdll(){}
+    static findAll(){}
     
 }
 

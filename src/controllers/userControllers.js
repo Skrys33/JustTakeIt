@@ -11,11 +11,13 @@ function checkSignIn(req, res) {
     }
 }
 
-router.get('/', (req, res, next) => {
-    res.redirect('/user/login')
+router.get('/login', (req, res, next) => {
+    res.format({
+        html: () => {res.render('user/signIn')},
+   })
 });
 
-router.get('/login', (req, res, next) => {
+router.get('/user', (req, res, next) => {
     setTimeout(() => {
         Users.findAll().then((users) => {
             res.render('login', { users: users })
@@ -48,7 +50,9 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/register', (req, res, next) => {
-    res.render('register')
+    res.format({
+        html: () => {res.render('user/signUp')},
+   })
 })
 
 router.post('/register', (req, res, next) => {

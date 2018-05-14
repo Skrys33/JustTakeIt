@@ -1,5 +1,6 @@
+const express = require('express')
+const router = express.Router()
 const Users = require("../models/user")
-const router = require('express').Router()
 
 function checkSignIn(req, res) {
     if (req.session.user) {
@@ -13,7 +14,7 @@ function checkSignIn(req, res) {
 
 router.get('/login', (req, res, next) => {
     res.format({
-        html: () => {res.render('user/signIn')},
+        html: () => {res.render('auth/signIn')},
    })
 });
 
@@ -51,7 +52,7 @@ router.post('/login', (req, res, next) => {
 
 router.get('/register', (req, res, next) => {
     res.format({
-        html: () => {res.render('user/signUp')},
+        html: () => {res.render('auth/signUp')},
    })
 })
 
@@ -91,11 +92,11 @@ router.post('/register', (req, res, next) => {
     }
 })
 
-router.get('/logout', function (req, res) {
+router.get('/logout', (req, res) => {
     req.session.destroy(function () {
         console.log("user logged out.")
     });
-    res.redirect('/user/login');
+    res.redirect('/auth/signIn');
 })
 
 module.exports = router

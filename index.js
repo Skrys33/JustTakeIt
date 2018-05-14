@@ -1,12 +1,12 @@
 const express = require('express')
-const config = require('./config/config')
 const path = require('path');
 const bodyParser = require('body-parser')
-
 const PORT = process.env.PORT || 8080
 const app = express()
+
 const { Db } = require('./src/db/db')
 const { User } = require('./src/models/user')
+const config = require('./config/config')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -20,7 +20,7 @@ app.all('/', (req, res, next) => {
   res.redirect('/login')
 })
 
-app.use('/user', require('./src/controllers/userControllers'))
+app.use(require('./src/controllers/userControllers'))
 
 
 

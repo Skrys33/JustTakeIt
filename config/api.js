@@ -2,9 +2,10 @@ const request = require('request')
 
 class Api {
     
-    static callApi(param){
-        request('http://api.allocine.fr/rest/v3/'+param, function (error, response, body) {            
+    static callApi(film){
+        request('https://api.themoviedb.org/3/search/movie?api_key=5b555b5b0b7c36a19758ce5d94001c06&language=fr&query=' + film, function (error, response, body) {            
             if (!error) {
+                console.log(body)
                 return body
             }else{
                 return error                
@@ -13,6 +14,6 @@ class Api {
     }
 }
 
-Api.callApi('search?partner=QUNXZWItQWxsb0Npbuk&q=avatar&format=json')
+Api.callApi('Avenger')
 
 module.exports = Api

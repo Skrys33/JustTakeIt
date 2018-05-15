@@ -20,9 +20,8 @@ app.all('/', (req, res, next) => {
   res.redirect('/login')
 })
 
-app.use(require('./src/controllers/userControllers'))
-
-
+app.use(require('./src/controllers/userController'))
+app.use(require('./src/controllers/movieController'))
 
 const db = new Db(config.db)
 db.connect().then(() => {

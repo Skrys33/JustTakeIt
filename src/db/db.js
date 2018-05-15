@@ -1,44 +1,52 @@
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/movies');
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error !'));
+db.once('open', console.log('connection success !'));
 
-let dbSingleton = null
+module.exports = { mongoose }
 
-class Db {
+// const MongoClient = require('mongodb').MongoClient;
 
-  constructor (options) {
-    this.client = null
-    this.options = {
-      url: null,
-      name: 'default',
-      ...options
-    }
-    dbSingleton = this
-  }
+// let dbSingleton = null
 
-  get adapter() {
-    return this.client.db(this.options.name)
-  }
+// class Db {
 
-  connect () {
-    return new Promise((resolve, reject) => {
-      MongoClient.connect(this.options.url, (err, mongoClient) => {
-        if (err) {
-          return reject(err);
-        }
-        console.log("successfully connected to the database");
-        this.client = mongoClient
-        console.log("Database created!");
-        resolve(mongoClient)
-      });
-    })
-  }
+//   constructor (options) {
+//     this.client = null
+//     this.options = {
+//       url: null,
+//       name: 'default',
+//       ...options
+//     }
+//     dbSingleton = this
+//   }
 
-  static getInstance () {
-    return dbSingleton
-  }
+//   get adapter() {
+//     return this.client.db(this.options.name)
+//   }
 
-  static collection (name) {
-    return dbSingleton.adapter.collection(name)
-  }
-}
+//   connect () {
+//     return new Promise((resolve, reject) => {
+//       MongoClient.connect(this.options.url, (err, mongoClient) => {
+//         if (err) {
+//           return reject(err);
+//         }
+//         console.log("successfully connected to the database");
+//         this.client = mongoClient
+//         console.log("Database created!");
+//         resolve(mongoClient)
+//       });
+//     })
+//   }
 
-module.exports = { Db }
+//   static getInstance () {
+//     return dbSingleton
+//   }
+
+//   static collection (name) {
+//     return dbSingleton.adapter.collection(name)
+//   }
+// }
+
+// module.exports = { Db }

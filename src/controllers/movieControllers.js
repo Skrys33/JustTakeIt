@@ -1,18 +1,27 @@
 const express = require('express')
-const router = express.Router()
-const Movies= = require("../models/movie")
-const api = require("../config/api")
+const app = express.Router()
+const api = require('../../config/api')
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
  
-router.get('/movieDetails', (req, res, next) => {
-    setTimeout(() => {
-        const detailsFilm = api.findFilmById(req.params.id)
-        const movieName = detailsFilm[2][1]
-        }, 1000)
+app.get('/movieDetails/:id', async (req, res, next) => {
+    const detailsFilm =JSON.parse( await api.findFilmById(req.params.id))
+    console.log('1')
+    console.log( detailsFilm.belongs_to_collection)
+    console.log('-------------')
+
+    const movieName = detailsFilm.belongs_to_collection.name
+        
     res.format({
-        html: () => {res.render('movieDetails', {movieName})},
+        html: () => {res.render('auth/movieDetails', {movieName})},
    })
 })
 
-module.exports = router
+app.get('/movieDetails', (req, res, next) => {
+    const movieName = ''
+    res.format({
+        html: () => {res.render('auth/movieDetails', {movieName})},
+    })
+})
+
+module.exports = app

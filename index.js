@@ -22,6 +22,7 @@ app.all('/', (req, res, next) => {
 
 app.use(require('./src/controllers/userControllers'))
 
+app.use(require('./src/controllers/movieControllers'))
 
 
 const db = new Db(config.db)

@@ -1,7 +1,7 @@
-const { Db } = require('../db/db')
+const Db = require('../db/db')
 
-const schemaMovie = new Db.Schema({ 
-  id: Schema.Types.ObjectId, 
+const schemaMovie = Db.mongoose.Schema({ 
+  id: Db.mongoose.Schema.Types.ObjectId, 
   name: String,
   director: String,
   description: String,
@@ -9,9 +9,9 @@ const schemaMovie = new Db.Schema({
   note: Number
 });
 
-const Movies = Db.model('Movies', schemaMovie);
+const Movies = Db.mongoose.model('Movies', schemaMovie);
 
-module.exports = { Movies }
+module.exports = Movies
 
 
 // const bd = require('')

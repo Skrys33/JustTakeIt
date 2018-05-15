@@ -1,11 +1,11 @@
-const { Db } = require('../db/db')
+const Db= require('../db/db')
 
-const schemaAccounts = new Db.Schema({ 
-  id: Schema.Types.ObjectId, 
-  idUser: Schema.Types.ObjectId,
+const schemaAccounts = Db.mongoose.Schema({ 
+  id: Db.mongoose.Schema.Types.ObjectId, 
+  idUser: Db.mongoose.Schema.Types.ObjectId,
   wallet: Number
 });
 
-const Accounts = Db.model('Accounts', schemaAccounts);
+const Accounts = Db.mongoose.model('Accounts', schemaAccounts);
 
-module.exports = { Accounts }
+module.exports = Accounts

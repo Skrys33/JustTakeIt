@@ -1,13 +1,13 @@
-const { Db } = require('../db/db')
+const Db = require('../db/db')
 
-const schemaTickets = new Db.Schema({ 
-  id: Schema.Types.ObjectId, 
-  idUser: Schema.Types.ObjectId,
-  idMovie: Schema.Types.ObjectId,
-  idCinema: Schema.Types.ObjectId,
+const schemaTickets = Db.mongoose.Schema({ 
+  id: Db.mongoose.Schema.Types.ObjectId, 
+  idUser: Db.mongoose.Schema.Types.ObjectId,
+  idMovie: Db.mongoose.Schema.Types.ObjectId,
+  idCinema: Db.mongoose.Schema.Types.ObjectId,
   price: Number
 });
 
-const Tickets = Db.model('Tickets', schemaTickets);
+const Tickets = Db.mongoose.model('Tickets', schemaTickets);
 
-module.exports = { Tickets }
+module.exports = Tickets

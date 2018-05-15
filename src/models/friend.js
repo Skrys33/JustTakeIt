@@ -1,10 +1,10 @@
-const { Db } = require('../db/db')
+const Db = require('../db/db')
 
-const schemaFriend = new Db.Schema({ 
-  idUser: Schema.Types.ObjectId,
-  idFriends: [Schema.Types.ObjectId]
+const schemaFriend = Db.mongoose.Schema({ 
+  idUser: Db.mongoose.Schema.Types.ObjectId,
+  idFriends: [Db.mongoose.Schema.Types.ObjectId]
 });
 
-const Friends = Db.model('Friends', schemaFriend);
+const Friends = Db.mongoose.model('Friends', schemaFriend);
 
-module.exports = { Friends }
+module.exports = Friends

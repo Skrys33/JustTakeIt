@@ -1,17 +1,17 @@
-const { Db } = require('../db/db')
+const Db = require('../db/db')
 
-const schemaUsers = new Db.Schema({ 
-  id: Schema.Types.ObjectId, 
+const schemaUsers = Db.mongoose.Schema({ 
+  id: Db.mongoose.Schema.Types.ObjectId, 
   name: String,
   firstName: String,
   pseudo: String,
   passWord: String,
-  idAccount: Schema.Types.ObjectId
+  idAccount: Db.mongoose.Schema.Types.ObjectId
 });
 
-const Users = Db.model('Users', schemaUsers);
+const Users = Db.mongoose.model('Users', schemaUsers);
 
-module.exports = { Users }
+module.exports = Users
 
 //const { Db } = require('../db/db')
 //const MongoClient = require('mongodb').MongoClient;

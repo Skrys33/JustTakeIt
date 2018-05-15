@@ -1,11 +1,11 @@
-const { Db } = require('../db/db')
+const Db = require('../db/db')
 
-const schemaHistorical = new Db.Schema({ 
-  id: Schema.Types.ObjectId, 
-  idUser: Schema.Types.ObjectId,
+const schemaHistorical = Db.mongoose.Schema({ 
+  id: Db.mongoose.Schema.Types.ObjectId, 
+  idUser: Db.mongoose.Schema.Types.ObjectId,
   movieName: String
 });
 
-const Historicals = Db.model('Historicals', schemaHistorical);
+const Historicals = Db.mongoose.model('Historicals', schemaHistorical);
 
-module.exports = { Historicals }
+module.exports = Historicals

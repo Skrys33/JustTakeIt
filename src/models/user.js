@@ -1,15 +1,28 @@
 const { Db } = require('../db/db')
-const MongoClient = require('mongodb').MongoClient;
 
-class User {
+const schemaUsers = new Db.Schema({ 
+  id: Schema.Types.ObjectId, 
+  name: String,
+  firstName: String,
+  pseudo: String,
+  passWord: String,
+  idAccount: Schema.Types.ObjectId
+});
 
-  static find() {
-    return Db.collection('user').find().toArray()
-  }
+const Users = Db.model('Users', schemaUsers);
 
-}
+module.exports = { Users }
 
-module.exports = { User }
+//const { Db } = require('../db/db')
+//const MongoClient = require('mongodb').MongoClient;
+
+//class User {
+
+  //static find() {
+    //return Db.collection('user').find().toArray()
+  //}
+
+//}
 
 //
 // const Admin = db.connect(url, function(err, db) {

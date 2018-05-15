@@ -14,6 +14,7 @@ class Api {
     }
 }
 
-Api.callApi('Avenger')
+// Usage :
+//Api.callApi('Avenger')
 
 module.exports = Api

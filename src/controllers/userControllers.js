@@ -92,6 +92,16 @@ router.post('/register', (req, res, next) => {
     }
 })
 
+router.get('/wallet', (req, res, next) => {
+    res.format({
+        html: () => {res.render('user/wallet')},
+   })
+})
+
+router.post('/wallet', (req, res, next) => {
+    
+})
+
 router.get('/logout', (req, res) => {
     req.session.destroy(function () {
         console.log("user logged out.")

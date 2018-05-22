@@ -1,0 +1,27 @@
+{% extends '../template/templateLog.twig' %}
+{% block content %}
+{% for error in errors %}
+            <div class="alert alert-danger col-md-12" role="alert">
+                {{error.message}}
+            </div>
+{% endfor %}
+<div class="container">
+    <h1>{{movieName}}</h1>
+    <img src="{{poster}}"/>
+  <div>
+      <h2>Description :</h2>
+      <p>{{overview}}</p>
+  </div>
+  <div>
+      <p>Note : {{vote_average}}</p>
+      <br>
+      <p>Date de réalisation : {{release_date}}</p>
+      <p>Genres : </p>
+      <ul>
+        {% for genre in genres %}
+            <li>{{genre.name}}</li>
+        {% endfor %}
+      </ul>
+  </div>
+</div>
+{% endblock %}

@@ -2,8 +2,8 @@
 {% block title %}Recherche - {% endblock %}
 {% block content %}
 <div class="container text-center">
-    <form class="form-inline" name="rechercher" action="document.getElementById("film").value">
-        <input class="form-control form-control-lg" type="text" id="film" placeholder="Rechercher">
+    <form class="form-inline" name="rechercher" method="GET" action="/search">
+        <input class="form-control form-control-lg" type="text" name="film" placeholder="Rechercher" >
         <button type="submit" class="btn btn-primary mb-2">Rechercher</button>
     </form>
 

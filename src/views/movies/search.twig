@@ -1,5 +1,7 @@
 {% extends '../template/template.twig' %}
 {% block title %}Rechercher un film{% endblock %}
 {% block content %}
-
+    {% for item in result %}
+        <p>{{ item }}</p>
+    {% endfor %}
 {% endblock %}

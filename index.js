@@ -26,6 +26,8 @@ app.use(session({ secret: "azerty" }))
 app.set('views', path.join(__dirname, 'src/views/'))
 app.set('view engine', 'twig')
 
+app.use(require('./src/controllers/userController'))
+
 app.all('/', (req, res, next) => {
   res.redirect('/login')
 })

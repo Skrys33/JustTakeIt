@@ -57,35 +57,34 @@ router.get('/register', (req, res, next) => {
 })
 
 router.post('/register', (req, res, next) => {
-    if (req.body.pseudo == "" || req.body.password == "" || req.body.confirmPassword == "") {
-        res.render('register', { message: "Input Empty !" })
-    } else if (req.body.password != req.body.confirmPassword) {
-        res.render('register', { message: "Confirm passworld fail !" })
+    if (req.body.username == "" || req.body.password == "") {
+        res.render('auth/signIn', { message: "Input Empty !" })
+        console.log("Empty");
     } else {
         setTimeout(() => {
             Users.findAll({
                 where: {
-                    pseudo: req.body.pseudo
+                    pseudo: req.body.username
                 }
             }).then((user) => {
                 if (user[0] == undefined) {
                     Users.create({
-                        pseudo: req.body.pseudo,
+                        pseudo: req.body.username,
                         password: req.body.password
                     }).then(() => {
                         return Users.findOne({
                             where: {
-                                pseudo: req.body.pseudo
+                                pseudo: req.body.username
                             }
                         })
                     }).then((user) => {
                         req.session.user = user
                         console.log("ajout utilisateur effectué !")
-                        console.log(req.session.user.pseudo)
-                        res.redirect('/todo')
+                        console.log(req.session.user.username)
+                        res.redirect('/login')
                     })
                 } else {
-                    res.render('register', { message: "User Already Exists ! Login or choose another user pseudo" })
+                    res.render('auth/signIn', { errors: [{message: "User Already Exists ! Login or choose another user pseudo" }]})
                 }
             })
         }, 1000)
@@ -99,7 +98,7 @@ router.get('/wallet', (req, res, next) => {
 })
 
 router.post('/wallet', (req, res, next) => {
-    
+
 })
 
 router.get('/logout', (req, res) => {

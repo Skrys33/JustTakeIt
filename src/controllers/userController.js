@@ -1,53 +1,38 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express').Router()
 const Users = require("../models/user")
+const Db = require("../db/db")
 
-function checkSignIn(req, res) {
-    if (req.session.user) {
-        console.log('from userController : login verif ok : '+req.session.user);
-        next();     //If session exists, proceed to page
-    } else {
-        console.log('from userController : login verif KO : '+req.session.user);
-        res.redirect('/user', { message: 'Not logged in !' })
-    }
-}
+// function checkSignIn(req, res) {
+//     if (req.session.user) {
+//         console.log('from userController : login verif ok : '+req.session.user);
+//         next();     //If session exists, proceed to page
+//     } else {
+//         console.log('from userController : login verif KO : '+req.session.user);
+//         res.redirect('/user', { message: 'Not logged in !' })
+//     }
+// }
 
-router.get('/login', (req, res, next) => {
-    res.format({
-        html: () => {res.render('auth/signIn')},
-   })
-});
-
-router.get('/user', (req, res, next) => {
-    setTimeout(() => {
-        Users.findAll().then((users) => {
-            res.render('login', { users: users })
-        })
-    }, 1000)
+router.get('/login', (req, res) => {
+    res.render('auth/signIn')
 })
 
-router.post('/login', (req, res, next) => {
-    if (req.body.pseudo == "" || req.body.password == "") {
-        res.render('login', { message: "Input Empty !" })
-    } else {
-        setTimeout(() => {
-            Users.findAll({
-                where: {
-                    pseudo: req.body.pseudo
-                }
-            }).then((user) => {
-                if (user[0] == undefined) {
-                    res.render('login', { message: "Bad pseudo !" })
-                } else if (user[0].pseudo == req.body.pseudo && user[0].password == req.body.password) {
-                    req.session.user = user[0]
-                    console.log(req.session.user.pseudo)
-                    res.redirect('/todo')
-                } else {
-                    res.render('login', { message: "Bad login !" })
-                }
-            })
-        }, 1000)
-    }
+router.post('/login', (req, res) => {
+    Users.findOne({'pseudo': req.body.username}, function(err, user) {
+        return user;
+    }).then((user) => {
+        if (!user){
+            res.render('auth/signIn', { errors: ['SignIn error', 'bad login']})
+        }
+        else if (user.password != req.body.password) {
+            res.render('auth/signIn', { errors: ['SignIn error', 'bad password']})
+        }
+        else {
+            //save session in reddit
+            req.session.user = user
+            console.log(req.session.user.pseudo)
+            res.render('home')
+        }
+    })
 })
 
 router.get('/register', (req, res, next) => {
@@ -57,44 +42,35 @@ router.get('/register', (req, res, next) => {
 })
 
 router.post('/register', (req, res, next) => {
-    if (req.body.pseudo == "" || req.body.password == "" || req.body.confirmPassword == "") {
-        res.render('register', { message: "Input Empty !" })
-    } else if (req.body.password != req.body.confirmPassword) {
-        res.render('register', { message: "Confirm passworld fail !" })
-    } else {
-        setTimeout(() => {
-            Users.findAll({
-                where: {
-                    pseudo: req.body.pseudo
-                }
-            }).then((user) => {
-                if (user[0] == undefined) {
-                    Users.create({
-                        pseudo: req.body.pseudo,
-                        password: req.body.password
-                    }).then(() => {
-                        return Users.findOne({
-                            where: {
-                                pseudo: req.body.pseudo
-                            }
-                        })
-                    }).then((user) => {
-                        req.session.user = user
-                        console.log("ajout utilisateur effectué !")
-                        console.log(req.session.user.pseudo)
-                        res.redirect('/todo')
-                    })
-                } else {
-                    res.render('register', { message: "User Already Exists ! Login or choose another user pseudo" })
-                }
-            })
-        }, 1000)
-    }
+    //console.log(req.body.username)
+    Users.findOne({ 'pseudo': req.body.username }, function (err, user) {
+        //console.log(user + ' in findOne')
+        return user;
+    }).then((user) => {
+        if(!user){
+            //save session in reddit
+            //console.log(user + ' then findOne')
+            let newUser = new Users({ pseudo: req.body.username, password: req.body.password })
+            newUser.save(function (err, newUser) {
+                if (err) return console.error(err);
+            });
+            req.session.user = newUser
+            console.log("ajout utilisateur effectué !")
+            console.log("user : " + req.session.user)
+            res.render('home')
+        }
+        else if (user.pseudo == req.body.username){
+            res.render('auth/signUp', { errors: ['SignUp error', 'Pseudo already exist'] })
+        }
+        else{
+            res.render('auth/signUp', { errors: ['SignUp error', 'Error Data Base'] })
+        }
+    })
 })
 
 router.get('/wallet', (req, res, next) => {
     res.format({
-        html: () => {res.render('user/wallet')},
+        html: () => {res.render('wallet')},
    })
 })
 

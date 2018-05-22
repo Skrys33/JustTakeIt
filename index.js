@@ -1,8 +1,10 @@
 const express = require('express')
+const session = require('express-session')
 const path = require('path');
 const bodyParser = require('body-parser')
 const PORT = process.env.PORT || 8080
 const app = express()
+//const cookieParser = require('cookie-parserr')
 
 const Db = require('./src/db/db')
 const Users = require('./src/models/user')
@@ -18,6 +20,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
 	extended: true
 }))
+app.use(session({ secret: "azerty" }))
+//app.use(cookieParser())
 
 app.set('views', path.join(__dirname, 'src/views/'))
 app.set('view engine', 'twig')

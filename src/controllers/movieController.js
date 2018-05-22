@@ -48,5 +48,12 @@ app.get('/topMovies', async (req, res, next) => {
    })
 });
 
+app.get('/moviesOfMonth', async (req, res, next) => {
+    const result = JSON.parse(await api.getMovieReleaseMonth())
+    res.format({
+        html: () => {res.render('movies/moviesOfMonth', {result})},
+   })
+});
+
 
 module.exports = app

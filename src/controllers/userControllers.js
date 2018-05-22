@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Users = require("../models/user")
+const Db = require("../db/db")
 
 // function checkSignIn(req, res) {
 //     if (req.session.user) {
@@ -15,14 +16,14 @@ router.get('/login', (req, res) => {
     res.render('auth/signIn')
 })
 
-router.post('/login', (req, res, next) => {
-    Users.findOne({'pseudo': res.body.username}, function(err, user) {
+router.post('/login', (req, res) => {
+    Users.findOne({'pseudo': req.body.username}, function(err, user) {
         return user;
     }).then((user) => {
-        if (user.pseudo == req.body.username){
+        if (!user){
             res.render('auth/signIn', { errors: ['SignIn error', 'bad login']})
         }
-        else if (user.passWord != req.body.password) {
+        else if (user.password != req.body.password) {
             res.render('auth/signIn', { errors: ['SignIn error', 'bad password']})
         }
         else {
@@ -41,21 +42,28 @@ router.get('/register', (req, res, next) => {
 })
 
 router.post('/register', (req, res, next) => {
+    //console.log(req.body.username)
     Users.findOne({ 'pseudo': req.body.username }, function (err, user) {
+        //console.log(user + ' in findOne')
         return user;
     }).then((user) => {
-        if(user.pseudo == req.body.username)
-            res.render('auth/signUp', { errors: ['SignUp error', 'Pseudo already exist'] })
-        else{
-            req.session.user = user
+        if(!user){
             //save session in reddit
-            let newUser = new Users({ pseudo: res.body.username }, { passWord: req.body.password })
+            //console.log(user + ' then findOne')
+            let newUser = new Users({ pseudo: req.body.username, password: req.body.password })
             newUser.save(function (err, newUser) {
                 if (err) return console.error(err);
             });
+            req.session.user = newUser
             console.log("ajout utilisateur effectué !")
-            console.log(req.session.user.pseudo)
+            console.log("user : " + req.session.user)
             res.render('home')
+        }
+        else if (user.pseudo == req.body.username){
+            res.render('auth/signUp', { errors: ['SignUp error', 'Pseudo already exist'] })
+        }
+        else{
+            res.render('auth/signUp', { errors: ['SignUp error', 'Error Data Base'] })
         }
     })
 })

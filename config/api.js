@@ -19,6 +19,17 @@ class Api {
             })
         })
     }
+    
+    static getTopMovies(){
+        return new Promise((resolve, reject) => {
+            request('https://api.themoviedb.org/3/discover/movie?api_key=5b555b5b0b7c36a19758ce5d94001c06&language=fr', function (error, response, body) {            
+                if (error) return reject(error)
+                resolve(body)
+            })
+        })
+    }
+    
+    
 }
 
 module.exports = Api

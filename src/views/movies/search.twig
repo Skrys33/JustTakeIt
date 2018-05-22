@@ -1,7 +1,21 @@
 {% extends '../template/template.twig' %}
-{% block title %}Rechercher un film{% endblock %}
+{% block title %}Recherche - {% endblock %}
 {% block content %}
-    {% for item in result %}
-        <p>{{ item }}</p>
+<div class="container text-center">
+    <form class="form-inline" name="rechercher" action="document.getElementById("film").value">
+        <input class="form-control form-control-lg" type="text" id="film" placeholder="Rechercher">
+        <button type="submit" class="btn btn-primary mb-2">Rechercher</button>
+    </form>
+
+    {% for item in films.results %}
+    <div class="container" id="searchResult"> 
+        <h1>{{ item.title }}</h1>
+        <a href="http://localhost:8080/movieDetails/{{item.id}}"><img src="https://image.tmdb.org/t/p/w500{{item.poster_path}}" alt="{{ item.title }}"></a>
+        <h4>Note : {{ item.vote_average }}</h4>
+        <h5>Date de sortie : {{ item.release_date }}</h5>
+        
+    <div>
     {% endfor %}
+
+</div>
 {% endblock %}

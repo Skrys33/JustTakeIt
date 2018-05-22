@@ -1,0 +1,19 @@
+{% extends '../template/templateLog.twig' %}
+{% block content %}
+{% for error in errors %}
+            <div class="alert alert-danger col-md-12" role="alert">
+                {{error.message}}
+            </div>
+{% endfor %}
+<div class="container">
+    <h1>Les films les plus populaires</h1>
+        {% for res in result.results %}
+          <div>
+            <h2>{{res.title}}</h2>
+            <a href="http://localhost:8080/movieDetails/{{res.id}}">
+                <img src="https://image.tmdb.org/t/p/w500{{res.poster_path}}"/>
+            </a>
+          </div>
+        {% endfor %}
+</div>
+{% endblock %}

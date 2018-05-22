@@ -7,8 +7,9 @@ app.use(bodyParser.json())
 app.get('/movieDetails/:id', async (req, res, next) => {
     const detailsFilm =JSON.parse( await api.findFilmById(req.params.id))
 
-    const movieName = detailsFilm.belongs_to_collection.name
-    const poster = 'https://image.tmdb.org/t/p/w500' + detailsFilm.belongs_to_collection.poster_path
+    
+    const movieName = detailsFilm.original_title
+    const poster = 'https://image.tmdb.org/t/p/w500' + detailsFilm.poster_path
     const overview = detailsFilm.overview
     const vote_average = detailsFilm.vote_average
     const release_date = detailsFilm.release_date
@@ -31,5 +32,13 @@ app.get('/search', async (req, res, next) => {
     const films = JSON.parse(await api.findFilmByName(req.param("film")))
     res.render('movies/search', {films})
 });
+
+app.get('/topMovies', async (req, res, next) => {
+    const result = JSON.parse(await api.getTopMovies())
+    res.format({
+        html: () => {res.render('movies/topMovies', {result})},
+   })
+});
+
 
 module.exports = app

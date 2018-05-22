@@ -31,6 +31,8 @@ app.all('/', (req, res, next) => {
 app.listen(PORT,() => {
   console.log('Serveur sur port :', PORT)
 })
+app.use(require('./src/controllers/userController'))
+app.use(require('./src/controllers/movieController'))
 
 // const db = new Db(config.db)
 // db.connect().then(() => {

@@ -35,18 +35,3 @@ app.listen(PORT,() => {
 })
 app.use(require('./src/controllers/userController'))
 app.use(require('./src/controllers/movieController'))
-
-// const db = new Db(config.db)
-// db.connect().then(() => {
-//   app.listen(PORT,() => {
-//     console.log('Serveur sur port :', PORT)
-//   })
-
-//   User.find().then((users) => {
-//     console.log(users)
-//   })
-
-
-// }).catch((err) => {
-//   console.error('Unable to connect to db', err)
-// })

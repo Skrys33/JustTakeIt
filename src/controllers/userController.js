@@ -29,7 +29,7 @@ router.post('/login', (req, res) => {
         else {
             //save session in reddit
             req.session.user = user
-            console.log(req.session.user.pseudo)
+            //console.log(req.session.user.pseudo)
             res.render('home')
         }
     })
@@ -52,12 +52,13 @@ router.post('/register', (req, res, next) => {
             //console.log(user + ' then findOne')
             let newUser = new Users({ pseudo: req.body.username, password: req.body.password })
             newUser.save(function (err, newUser) {
-                if (err) return console.error(err);
-            });
-            req.session.user = newUser
+                if (err) return console.error(err)
+                //console.log('user : ' + newUser)
+            })
             console.log("ajout utilisateur effectué !")
-            console.log("user : " + req.session.user)
-            res.render('home')
+            req.session.user = newUser
+            console.log(req.session.user)
+            res.redirect('/home')
         }
         else if (user.pseudo == req.body.username){
             res.render('auth/signUp', { errors: ['SignUp error', 'Pseudo already exist'] })
@@ -70,12 +71,51 @@ router.post('/register', (req, res, next) => {
 
 router.get('/wallet', (req, res, next) => {
     res.format({
-        html: () => {res.render('wallet')},
+        html: () => {res.render('user/wallet')},
    })
 })
 
-router.post('/wallet', (req, res, next) => {
+router.post('/wallet', (req, res) => {
     
+})
+
+router.get('/home', (req,res) => {
+    if (!req.session.user._id){
+        Users.findOne({'pseudo': req.session.user.pseudo}, function(err, user) {
+            req.session.user = user
+            console.log("log user after home" + req.session.user)
+        })
+    }
+    res.render('home')
+})
+
+router.get('/account', (req, res) => {
+    //console.log(req.session.user)
+    let User = req.session.user
+    res.render('user/account', {User})
+})
+
+router.post('/account', (req,res) => {
+    Users.findById(req.body.id, function (err, user) {
+        if (err) return handleError(err);
+      
+        user.name = req.body.name
+        user.firstName = req.body.firstName
+        user.pseudo = req.body.username
+        user.password = req.body.password
+        
+        user.save(function (err, update) {
+          if (err) return handleError(err)
+          console.log("profile updated !" + update)
+        //   req.session.user = update
+        //   console.log("updat session in save : " + req.session.user)
+        })
+        req.session.user = user
+        //console.log("updat session after save : " + req.session.user)
+    }).then(() => {
+        let User = req.session.user
+        res.render('user/account', {User, errors: ['Profile updated !']})
+    })
 })
 
 router.get('/logout', (req, res) => {

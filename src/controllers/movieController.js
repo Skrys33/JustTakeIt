@@ -28,17 +28,9 @@ app.get('/movieDetails', (req, res, next) => {
     })
 })
 
-app.get('/search/:name', async (req, res, next) => {
-    const result = JSON.parse(await api.findFilmByName(req.params.name))
-    res.format({
-        html: () => {res.render('movies/search', {result})},
-   })
-});
-
-app.get('/search', (req, res, next) => {
-    res.format({
-        html: () => {res.render('movies/search')},
-   })
+app.get('/search', async (req, res, next) => {
+    const films = JSON.parse(await api.findFilmByName(req.param("film")))
+    res.render('movies/search', {films})
 });
 
 app.get('/topMovies', async (req, res, next) => {

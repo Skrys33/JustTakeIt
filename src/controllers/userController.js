@@ -42,30 +42,38 @@ router.get('/register', (req, res, next) => {
 })
 
 router.post('/register', (req, res, next) => {
-    //console.log(req.body.username)
-    Users.findOne({ 'pseudo': req.body.username }, function (err, user) {
-        //console.log(user + ' in findOne')
-        return user;
-    }).then((user) => {
-        if(!user){
-            //save session in reddit
-            //console.log(user + ' then findOne')
-            let newUser = new Users({ pseudo: req.body.username, password: req.body.password })
-            newUser.save(function (err, newUser) {
-                if (err) return console.error(err);
-            });
-            req.session.user = newUser
-            console.log("ajout utilisateur effectué !")
-            console.log("user : " + req.session.user)
-            res.render('home')
-        }
-        else if (user.pseudo == req.body.username){
-            res.render('auth/signUp', { errors: ['SignUp error', 'Pseudo already exist'] })
-        }
-        else{
-            res.render('auth/signUp', { errors: ['SignUp error', 'Error Data Base'] })
-        }
-    })
+    if (req.body.username == "" || req.body.password == "") {
+        res.render('auth/signIn', { message: "Input Empty !" })
+        console.log("Empty");
+    } else {
+        setTimeout(() => {
+            Users.findAll({
+                where: {
+                    pseudo: req.body.username
+                }
+            }).then((user) => {
+                if (user[0] == undefined) {
+                    Users.create({
+                        pseudo: req.body.username,
+                        password: req.body.password
+                    }).then(() => {
+                        return Users.findOne({
+                            where: {
+                                pseudo: req.body.username
+                            }
+                        })
+                    }).then((user) => {
+                        req.session.user = user
+                        console.log("ajout utilisateur effectué !")
+                        console.log(req.session.user.username)
+                        res.redirect('/login')
+                    })
+                } else {
+                    res.render('auth/signIn', { errors: [{message: "User Already Exists ! Login or choose another user pseudo" }]})
+                }
+            })
+        }, 1000)
+    }
 })
 
 router.get('/wallet', (req, res, next) => {
@@ -75,7 +83,7 @@ router.get('/wallet', (req, res, next) => {
 })
 
 router.post('/wallet', (req, res, next) => {
-    
+
 })
 
 router.get('/logout', (req, res) => {

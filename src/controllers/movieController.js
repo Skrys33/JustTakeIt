@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express.Router()
 const api = require('../../config/api')
+const Historical = require("../models/historical")
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
  
@@ -47,5 +48,31 @@ app.get('/moviesOfMonth', async (req, res, next) => {
    })
 });
 
+app.get('/historical', (req,res) => {
+    let id = req.session.user._id
+    Historical.find({'idUser': id}, function(err, historical) {
+        return historical
+    }).then((historical) => {
+        //console.log(historical[0])
+        if(historical[0] == undefined) {
+            // let newHisto = new Historical({ idMovie: 299536, idUser: id, movieName: 'name of the movie' })
+            // newHisto.save(function (err, newUser) {
+            //     if (err) return console.error(err)
+            //     console.log('film : ' + newHisto)
+            // })
+            res.render('movies/historical', {errors: ['No historical !']})
+        }
+        else {
+            //Historical.remove({ _id: '4bfb00b2-e405-418e-8f47-b923ad3a9d4d' }, function(err) {console.log('remove ok !')})
+            //recup le lien vers le details de chaque film
+            // const films = JSON.parse(await api.findFilmById(historical[0].idMovie))
+            // for(let item in historical){
+            //     const films = JSON.parse(await api.findFilmById(item.idMovie))
+            //     histo.push(films)
+            // }
+            res.render('movies/historical', {historical})
+        }
+    })
+})
 
 module.exports = app

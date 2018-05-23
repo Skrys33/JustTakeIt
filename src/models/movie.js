@@ -1,7 +1,8 @@
 const Db = require('../db/db')
+const uuid = require('node-uuid')
 
 const schemaMovie = Db.mongoose.Schema({ 
-  id: Db.mongoose.Schema.Types.ObjectId, 
+  _id: { type: String, default: uuid.v4 }, 
   name: String,
   director: String,
   description: String,

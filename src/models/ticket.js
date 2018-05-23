@@ -1,7 +1,8 @@
 const Db = require('../db/db')
+const uuid = require('node-uuid')
 
 const schemaTickets = Db.mongoose.Schema({ 
-  id: Db.mongoose.Schema.Types.ObjectId, 
+  _id: { type: String, default: uuid.v4 },
   idUser: Db.mongoose.Schema.Types.ObjectId,
   idMovie: Db.mongoose.Schema.Types.ObjectId,
   idCinema: Db.mongoose.Schema.Types.ObjectId,

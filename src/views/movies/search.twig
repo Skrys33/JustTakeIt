@@ -14,13 +14,17 @@
     <div class="container text-center">
         <div class="row">
             {% for item in films.results %}
-            <div class="col-6 card" style="width: 100px;">
-                <div class="card-header">{{ item.title }}</div>
-                <a href="http://localhost:8080/movieDetails/{{item.id}}"><img class="card-img-top" src="https://image.tmdb.org/t/p/w500{{item.poster_path}}" alt="{{ item.title }}" height="300" width="200"></a>
-            <div class="card-body">
-                <p class="card-text">Note : {{ item.vote_average }}</p>
-                <p class="card-text">Date de sortie : {{ item.release_date }}</p>
-            </div>
+            <div class="col-md-4 " style="width: 18rem;">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">{{ item.title }}</div>
+                    <a href="http://localhost:8080/movieDetails/{{item.id}}">
+                        <img class="card-img-top" src="https://image.tmdb.org/t/p/w500{{item.poster_path}}" alt="{{ item.title }}" height="300" width="200">
+                    </a>
+                <div class="card-body">
+                    <p class="card-text">Note : {{ item.vote_average }}</p>
+                    <p class="card-text">Date de sortie : {{ item.release_date }}</p>
+                </div>
+                </div>
             </div>
             {% endfor %}
         </div>

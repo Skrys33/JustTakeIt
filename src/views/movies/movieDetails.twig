@@ -16,12 +16,14 @@
       <p>Note : {{vote_average}}</p>
       <br>
       <p>Date de réalisation : {{release_date}}</p>
-      <p>Genres : </p>
-      <ul>
-        {% for genre in genres %}
-            <li>{{genre.name}}</li>
-        {% endfor %}
-      </ul>
+      <p>Genres : 
+        <span class="badge badge-dark">
+            {% for genre in genres %}
+                {{genre.name}}
+            {% endfor %}
+        </span>
+      </p>
+      
   </div>
 </div>
 {% endblock %}

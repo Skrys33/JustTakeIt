@@ -37,11 +37,17 @@ app.post('/movieDetails/:id', (req,res) => {
                         console.log('update movie place : ' + updateMovie.place)
                     })
                     //générer le ticket
-                    let ticket = new Ticket({ idUser: req.session.user._id, idMovie: req.params.id, price: req.body.price })
-                    ticket.save(function (err, newTicket) {
-                        if (err) return console.error(err)
-                        console.log('new ticket géneration : ' + newTicket)
-                        res.render('user/ticket', {tic: newTicket, errors: ['buy confirmed !']})
+                    Ticket.findOne({ 'idMovie': req.params.id, 'idUser':'admin' }, function(err, ticket) {
+                        let tic = ticket
+                        //console.log(tic.idUser)
+                        tic.idUser = req.session.user._id
+                        //console.log(tic.idUser)
+                        tic.price = req.body.price
+
+                        tic.save(function(err,tik) {
+                            console.log(tik)
+                            res.render('user/ticket', {tic: tik, errors: ['buy confirmed !']})
+                        })
                     })
                 }
             })
@@ -92,6 +98,12 @@ app.get('/movieDetails/:id', async (req, res, next) => {
             newMovies.save(function (err, movie) {
                 if (err) return console.error(err)
                 console.log('movie : ' + movie)
+                //générer le ticket
+                let ticket = new Ticket({ idMovie: newMovies._id, idUser: 'admin', price:0 })
+                ticket.save(function (err, newTicket) {
+                    if (err) return console.error(err)
+                    console.log('new ticket géneration : ' + newTicket)
+                })
             })            
 
             res.format({

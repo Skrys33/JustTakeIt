@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Users = require("../models/user")
+const Tickets = require('../models/ticket')
 const Db = require("../db/db")
 
 // function checkSignIn(req, res) {
@@ -96,7 +97,23 @@ router.get('/account', (req, res) => {
 })
 
 router.get('/ticket', (req, res) => {
-
+    Tickets.find({ 'idUser':req.session.user._id }, function(err, tickets) {
+        //console.log('log find : '+tickets)
+    })
+    .populate('idMovie')
+    .exec(function(err, tickets) {
+        console.log(tickets)
+        if(tickets[0] == undefined){
+            res.render('user/ticket', { errors: ['no ticket !'] })
+        }
+        // else if (tickets[0].idMovie == undefined){
+        //     res.render('user/ticket', { errors: ['DataBase problem !'] })
+        // }
+        else {
+            console.log(tickets)
+            console.log(tickets[0].idMovie)
+        }
+    })
 })
 
 router.post('/account', (req,res) => {

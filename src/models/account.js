@@ -3,7 +3,7 @@ const uuid = require('node-uuid')
 
 const schemaAccounts = Db.mongoose.Schema({ 
   _id: { type: String, default: uuid.v4 }, 
-  idUser: Db.mongoose.Schema.Types.ObjectId,
+  idUser: { type: String, default: uuid.v4 },
   wallet: Number
 });
 

@@ -1,0 +1,28 @@
+{% extends '../template/templateLog.twig' %}
+{% block content %}
+<a href="/home">home</a>
+{% for error in errors %}
+            <div class="alert alert-danger col-md-12" role="alert">
+                {{error}}
+            </div>
+{% endfor %}
+<div class="container">
+    <h1>Tickets</h1>
+  <div>
+        {% if tic %}
+            <h2>numero du ticket : {{tic._id}}</h2>
+            <h3>numero du film : {{tic.idMovie}}</h3>
+            <h3>prix de la scéance : {{tic.price}} € </h3>
+        {% elseif tickets %}
+            {% for item in tickets %}
+            <div class="col-6">
+                <h2>numero du ticket : {{item._id}}</h2>
+                <h3>numero du film : {{item.idMovie}}</h3>
+                <h3>nom du film : {{item.idMovie.name}}</h3>
+                <h3>prix de la scéance : {{item.price}} € </h3>
+            </div>
+            {% endfor %}
+        {% endif %}
+  </div>
+</div>
+{% endblock %}

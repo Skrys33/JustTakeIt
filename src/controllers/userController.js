@@ -1,18 +1,11 @@
 const router = require('express').Router()
 const Users = require("../models/user")
+const Tickets = require('../models/ticket')
 const Db = require("../db/db")
 const utils = require('../../config/utils')
 const cache = require('../redis-cache/cache')
 const redis = require('redis')
-// function checkSignIn(req, res) {
-//     if (req.session.user) {
-//         console.log('from userController : login verif ok : '+req.session.user);
-//         next();     //If session exists, proceed to page
-//     } else {
-//         console.log('from userController : login verif KO : '+req.session.user);
-//         res.redirect('/user', { message: 'Not logged in !' })
-//     }
-// }
+
 
 router.get('/login', (req, res) => {
     res.render('auth/signIn')
@@ -23,7 +16,6 @@ router.post('/login', (req, res) => {
     Users.findOne({'pseudo': req.body.username}, (err, user) => {
         return user
     }).then((user) => {
-        
         if (!user){
             res.render('auth/signIn', { errors: ['SignIn error', 'bad login']})
         }
@@ -50,18 +42,17 @@ router.get('/register', (req, res, next) => {
 })
 
 router.post('/register', (req, res, next) => {
-    //console.log(req.body.username)
+
     Users.findOne({ 'pseudo': req.body.username }, (err, user) =>  {
-        //console.log(user + ' in findOne')
+     
         return user;
     }).then((user) => {
         if(!user){
-            //save session in reddit
-            //console.log(user + ' then findOne')
+           
             let newUser = new Users({ pseudo: req.body.username, password: req.body.password})
             newUser.save(function (err, newUser) {
                 if (err) return console.error(err)
-                //console.log('user : ' + newUser)
+              
             })
             cache.set('user', newUser._id, redis.print)
             console.log("ajout utilisateur effectué !")
@@ -97,7 +88,8 @@ router.post('/wallet', (req, res) => {
 
 router.get('/home', (req,res) => {
     if(req.session.user === undefined)
-        res.send('t\'es pas log gros ! ')
+        res.send('Vous n\'êtes pas connecter')
+
     cache.exists('user',function(err,reply) {
         if(!err) {
          if(reply === 1) {
@@ -115,14 +107,13 @@ router.get('/home', (req,res) => {
 })
 
 router.get('/account', (req, res) => {
-    //console.log(req.session.user)
+   
     let User = req.session.user
     cache.exists('user', (err, reply) => {
         if(!err) {
             if(reply === 1){
                 console.log('Key exists')
                 res.render('user/account', {User})
-                res.render('home')
             }else{
                 Users.findOne({'pseudo': req.session.user.pseudo}, function(err, user) {
                 cache.set('user', User._id, redis.print)
@@ -134,7 +125,21 @@ router.get('/account', (req, res) => {
 })
 
 router.get('/ticket', (req, res) => {
-
+    Tickets.find({ 'idUser':req.session.user._id }, function(err, tickets) {
+      
+    })
+    .populate('idMovie')
+    .exec(function(err, tickets) {
+        console.log(tickets)
+        if(tickets[0] == undefined){
+            res.render('user/ticket', { errors: ['no ticket !'] })
+        }
+        
+        else {
+            console.log(tickets)
+            console.log(tickets[0].idMovie)
+        }
+    })
 })
 
 router.post('/account', (req,res) => {
@@ -149,11 +154,10 @@ router.post('/account', (req,res) => {
         user.save( (err, update) => {
           if (err) return handleError(err)
           console.log("profile updated !" + update)
-        //   req.session.user = update
-        //   console.log("updat session in save : " + req.session.user)
+   
         })
         req.session.user = user
-        //console.log("updat session after save : " + req.session.user)
+       
     }).then(() => {
         let User = req.session.user
         res.render('user/account', {User, errors: ['Profile updated !']})

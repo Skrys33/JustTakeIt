@@ -1,16 +1,14 @@
-{% extends '../template/templateLog.twig' %}
+{% extends '../template/template.twig' %}
 {% block content %}
-<a href="/home">home</a>
 {% for error in errors %}
             <div class="alert alert-danger col-md-12" role="alert">
                 {{error}}
             </div>
 {% endfor %}
-<div class="container">
+<div class="container text-center">
     <h1>Profile</h1>
   <div>
       <h2>{{User.pseudo}}</h2>
-      <h3>user id : {{User._id}}</h3>
   </div>
   <div>
     <form action="/account" method="POST">
@@ -31,6 +29,15 @@
         <input name="firstName" type="text" id="firstName" class="form-control" placeholder="firstName" value="{{User.firstName}}">
         </div>
         <input name="id" type="hidden" id="id" value="{{User._id}}">
+        <div class="form-group">
+            <select class="form-control" name="wallet" placeholder="Select">
+                <option>10</option>
+                <option>20</option>
+                <option>30</option>
+                <option>40</option>
+                <option>50</option>
+            </select>
+        </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
     </form>
   </div>

@@ -150,6 +150,8 @@ router.post('/account', (req,res) => {
         user.firstName = req.body.firstName
         user.pseudo = req.body.username
         user.password = req.body.password
+        user.wallet = req.body.wallet
+        console.log(user)
         
         user.save( (err, update) => {
           if (err) return handleError(err)

@@ -125,19 +125,17 @@ router.get('/account', (req, res) => {
 })
 
 router.get('/ticket', (req, res) => {
-    Tickets.find({ 'idUser':req.session.user._id }, function(err, tickets) {
-      
-    })
-    .populate('idMovie')
-    .exec(function(err, tickets) {
-        console.log(tickets)
-        if(tickets[0] == undefined){
+    Tickets.find({ 'idUser':req.session.user._id }, (err, tickets) => {
+      return tickets
+    }).populate(
+        'idMovie'
+    )
+    .exec((err, tickets) => {
+        if(tickets[0] === undefined){
             res.render('user/ticket', { errors: ['no ticket !'] })
-        }
-        
-        else {
+        }else {
+            res.render('user/ticket', {tickets})
             console.log(tickets)
-            console.log(tickets[0].idMovie)
         }
     })
 })

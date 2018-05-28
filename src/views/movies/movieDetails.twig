@@ -19,9 +19,15 @@
       <p>Genres : </p>
       <ul>
         {% for genre in genres %}
-            <li>{{genre.name}}</li>
+            <li>{{genre}}</li>
         {% endfor %}
       </ul>
+      <p>12€ la place</p>
+      <p>place restante : {{place}} </p>
+        <form action="" method="POST">
+            <input name="price" type="hidden" id="price" value=12>
+            <button class="btn btn-info btn-lg" type="submit">take a place</button>
+        </form>
   </div>
 </div>
 {% endblock %}

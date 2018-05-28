@@ -19,7 +19,7 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-
+    
     Users.findOne({'pseudo': req.body.username}, (err, user) => {
         return user
     }).then((user) => {
@@ -32,6 +32,7 @@ router.post('/login', (req, res) => {
         }
         else {
             //save session in reddit
+            req.session.user = user
             cache.get('user', function(err, result) {
                 console.log(result); // this is a string
                 //console.log(req.session.user.pseudo)
@@ -95,6 +96,8 @@ router.post('/wallet', (req, res) => {
 })
 
 router.get('/home', (req,res) => {
+    if(req.session.user === undefined)
+        res.send('t\'es pas log gros ! ')
     cache.exists('user',function(err,reply) {
         if(!err) {
          if(reply === 1) {

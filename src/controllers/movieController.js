@@ -2,25 +2,22 @@ const express = require('express')
 const app = express.Router()
 const api = require('../../config/api')
 const Historical = require("../models/historical")
-const Account = require('../models/account')
+const Account = require('../models/user')
 const Movie = require('../models/movie')
 const Ticket = require('../models/ticket')
 const bodyParser = require('body-parser')
+const cache = require('../redis-cache/cache')
+const redis = require('redis')
 app.use(bodyParser.json())
 
 app.post('/movieDetails/:id', (req,res) => {
-    //astuce : regenerer le wallet à chaque fois pour les tests
-    Account.findById('442a9bba-7967-4bfb-8bf3-4950be368215', function(err, account) {
-        account.wallet = 12
-        account.save(function (err, updateAccount) {
-            console.log("wallet test regenerated" + account)
-        })
-    })
 
     //verifier le nombre de place pour ce film
-    Movie.findOne({'idMovie':req.params.id}, function(err, movie) {
+    const user = req.session.user
+    const idMovie = parseInt(req.params.id)
+    Movie.findOne({idMovie}, function(err, movie) {
         if (movie.place > 0) {
-            Account.findOne({idUser: req.session.user._id}, function(err, account) {
+            Account.findById({_id: req.session.user._id}, function(err, account) {
                 if(account.wallet < req.body.price){
                     res.render('home', {errors: ['your wallet is too low !', 'transaction fail !']})
                 }
@@ -37,10 +34,11 @@ app.post('/movieDetails/:id', (req,res) => {
                         console.log('update movie place : ' + updateMovie.place)
                     })
                     //générer le ticket
-                    Ticket.findOne({ 'idMovie': req.params.id, 'idUser':'admin' }, function(err, ticket) {
+                    console.log('Id user est '+user._id)
+                    Ticket.findOne({ idMovie, 'idUser': user._id }, function(err, ticket) {
                         let tic = ticket
                         //console.log(tic.idUser)
-                        tic.idUser = req.session.user._id
+                        tic.idUser = user._id
                         //console.log(tic.idUser)
                         tic.price = req.body.price
 
@@ -59,9 +57,11 @@ app.post('/movieDetails/:id', (req,res) => {
 })
 
 app.get('/movieDetails/:id', async (req, res, next) => {
+    
     const detailsFilm =JSON.parse( await api.findFilmById(req.params.id))
     //verifier si le film et dans la bdd, => l ajouter => le lire
-    Movie.findOne({ 'idMovie': req.params.id }, function(err, movie) {
+    const idMovie = parseInt(req.params.id) 
+    Movie.findOne({ idMovie }, function(err, movie) {
         return movie
     }).then((movie) => {
         if(!movie) {
@@ -78,10 +78,10 @@ app.get('/movieDetails/:id', async (req, res, next) => {
             let genresName = []
 
             for(let item in genres){
-                //console.log(genres[item].name)
+               
                 genresName[item] = genres[item].name
             }
-            //console.log(genresName)
+          
 
             let newMovies = new Movie(
                 {   
@@ -98,8 +98,8 @@ app.get('/movieDetails/:id', async (req, res, next) => {
             newMovies.save(function (err, movie) {
                 if (err) return console.error(err)
                 console.log('movie : ' + movie)
-                //générer le ticket
-                let ticket = new Ticket({ idMovie: newMovies._id, idUser: 'admin', price:0 })
+                const id = parseInt(movie.idMovie) 
+                let ticket = new Ticket({ idMovie: id, idUser: req.session.user._id, price:0 })
                 ticket.save(function (err, newTicket) {
                     if (err) return console.error(err)
                     console.log('new ticket géneration : ' + newTicket)
@@ -153,30 +153,28 @@ app.get('/moviesOfMonth', async (req, res, next) => {
 });
 
 app.get('/historical', (req,res) => {
-    let id = req.session.user._id
-    Historical.find({'idUser': id}, function(err, historical) {
-        return historical
-    }).then((historical) => {
-        //console.log(historical[0])
-        if(historical[0] == undefined) {
-            // let newHisto = new Historical({ idMovie: 299536, idUser: id, movieName: 'name of the movie' })
-            // newHisto.save(function (err, newUser) {
-            //     if (err) return console.error(err)
-            //     console.log('film : ' + newHisto)
-            // })
-            res.render('movies/historical', {errors: ['No historical !']})
+    cache.exists('user', (err, reply) => {
+        if(!err) {
+            if(reply === 1){
+                cache.get('user', (err, reply) => {
+                    Historical.findById({'_id': reply}, function(err, historical) {
+                        return historical
+                    }).then((historical) => {
+                        if(historical === undefined) {
+                          
+                            res.render('movies/historical', {errors: ['No historical !']})
+                        }
+                        else {
+                            
+                            res.render('movies/historical', {historical})
+                        }
+                    })
+                })
+            }else{
+                console.log('user dosen\'t exist')
+            }
         }
-        else {
-            //Historical.remove({ _id: '4bfb00b2-e405-418e-8f47-b923ad3a9d4d' }, function(err) {console.log('remove ok !')})
-            //recup le lien vers le details de chaque film
-            // const films = JSON.parse(await api.findFilmById(historical[0].idMovie))
-            // for(let item in historical){
-            //     const films = JSON.parse(await api.findFilmById(item.idMovie))
-            //     histo.push(films)
-            // }
-            res.render('movies/historical', {historical})
-        }
-    })
+    })    
 })
 
 module.exports = app

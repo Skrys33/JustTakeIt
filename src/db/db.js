@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/movies');
 const db = mongoose.connection;
 db.on('error', () => console.error('connection error !'));
-db.once('open', () => console.log('connection success !'));
+db.once('open', () => console.log('connection mongodb success !'));
 
 module.exports = { mongoose }
 

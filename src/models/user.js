@@ -7,6 +7,7 @@ const schemaUsers = Db.mongoose.Schema({
   firstName: String,
   pseudo: String,
   password: String,
+  wallet: Number,
   idAccount: Db.mongoose.Schema.Types.ObjectId
 });
 

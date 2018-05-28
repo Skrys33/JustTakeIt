@@ -1,4 +1,4 @@
-{% extends '../template/templateLog.twig' %}
+{% extends '../template/template.twig' %}
 {% block content %}
 {% for error in errors %}
             <div class="alert alert-danger col-md-12" role="alert">
@@ -16,15 +16,14 @@
       <p>Note : {{vote_average}}</p>
       <br>
       <p>Date de réalisation : {{release_date}}</p>
-      <p>Genres : </p>
-      <ul>
-        {% for genre in genres %}
-            <li>{{genre}}</li>
-        {% endfor %}
-      </ul>
-      <p>12€ la place</p>
-      <p>place restante : {{place}} </p>
-        <form action="" method="POST">
+      <p>Genres : 
+        <span class="badge badge-dark">
+            {% for genre in genres %}
+                {{genre.name}}
+            {% endfor %}
+        </span>
+      </p>
+      <form action="" method="POST">
             <input name="price" type="hidden" id="price" value=12>
             <button class="btn btn-info btn-lg" type="submit">take a place</button>
         </form>

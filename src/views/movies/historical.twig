@@ -1,6 +1,5 @@
-{% extends '../template/templateLog.twig' %}
+{% extends '../template/template.twig' %}
 {% block content %}
-<a href="/home">home</a>
 {% for error in errors %}
             <div class="alert alert-danger col-md-12" role="alert">
                 {{error}}
@@ -11,7 +10,7 @@
   <div>
         {% for item in historical %}
             <div class="col-6">
-                <a href="http://localhost:8080/movieDetails/{{item.idMovie}}">{{ item.movieName }}</a>
+                <a href="/movieDetails/{{item.idMovie}}">{{ item.movieName }}</a>
                 {# <a href="http://localhost:8080/movieDetails/{{item.id}}"><img src="https://image.tmdb.org/t/p/w500{{item.poster_path}}" alt="{{ item.title }}" height="300" width="200"></a>
                 <h4>Note : {{ item.vote_average }}</h4>
                 <h5>Date de sortie : {{ item.release_date }}</h5> #}

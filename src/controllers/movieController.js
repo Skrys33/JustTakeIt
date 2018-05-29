@@ -72,17 +72,12 @@ app.get('/movieDetails/:id', async (req, res, next) => {
             const overview = detailsFilm.overview
             const vote_average = detailsFilm.vote_average
             const release_date = detailsFilm.release_date
-
             const genres = detailsFilm.genres
             
-            let genresName = []
-
-            for(let item in genres){
-               
-                genresName[item] = genres[item].name
+            const infos = []
+            for (g in genres){
+                infos.push(g)
             }
-          
-
             let newMovies = new Movie(
                 {   
                     name: movieName, 
@@ -90,11 +85,12 @@ app.get('/movieDetails/:id', async (req, res, next) => {
                     poster: poster,
                     overview: overview,
                     note: vote_average,
-                    genres: genresName,
+                    genres: infos,
                     release_date: release_date,
                     place:1
                 }
             )
+            console.log(newMovies)
             newMovies.save(function (err, movie) {
                 if (err) return console.error(err)
                 console.log('movie : ' + movie)
@@ -107,7 +103,7 @@ app.get('/movieDetails/:id', async (req, res, next) => {
             })            
 
             res.format({
-                html: () => {res.render('movies/movieDetails', {movieName, poster, overview, vote_average, release_date, genresName, id: req.params.id})},
+                html: () => {res.render('movies/movieDetails', {movieName, poster, overview, vote_average, release_date, genres, id: req.params.id})},
             })
         }
         else {

@@ -1,0 +1,41 @@
+{% extends '../template/template.twig' %}
+{% block content %}
+{% for error in errors %}
+            <div class="alert alert-success col-md-12" role="alert">
+                {{error}}
+            </div>
+{% endfor %}
+<div class="container">
+    <h1>Tickets</h1>
+  <div>
+        {% if tic %}
+            <form>
+            <div class="form-row">
+                <div class="col-7">
+                <input type="text" class="form-control" placeholder="{{tic._id}}" readonly>
+                </div>
+                <div class="col">
+                <input type="text" class="form-control" placeholder="{{tic.idMovie}}" readonly>
+                </div>
+                <div class="col">
+                <input type="text" class="form-control" placeholder="{{tic.price}} €" readonly>
+                </div>
+            </div>
+            </form>
+        {% elseif tickets %}
+            {% for item in tickets %}
+            <form>
+            <div class="form-row">
+                <div class="col-7">
+                <input type="text" class="form-control" placeholder="{{item._id}}" readonly>
+                </div>
+                <div class="col">
+                <input type="text" class="form-control" placeholder="{{item.price}} €" readonly>
+                </div>
+            </div>
+            </form>
+            {% endfor %}
+        {% endif %}
+  </div>
+</div>
+{% endblock %}

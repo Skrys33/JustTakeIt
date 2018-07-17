@@ -1,26 +1,16 @@
-const { Db } = require('../db/db')
-const MongoClient = require('mongodb').MongoClient;
+const Db = require('../db/db')
+const uuid = require('node-uuid')
 
-class User {
+const schemaUsers = Db.mongoose.Schema({ 
+  _id: { type: String, default: uuid.v4 },
+  name: String,
+  firstName: String,
+  pseudo: String,
+  password: String,
+  wallet: Number,
+  idAccount: Db.mongoose.Schema.Types.ObjectId
+});
 
-  static find() {
-    return Db.collection('user').find().toArray()
-  }
+const Users = Db.mongoose.model('Users', schemaUsers);
 
-}
-
-module.exports = { User }
-
-//
-// const Admin = db.connect(url, function(err, db) {
-//   if (err) throw err;
-//   const user = db.createUser({
-//     user: "Admin",
-//     pwd: "root",
-// })
-//
-//   console.log("Database created!");
-//   db.close();
-// });
-//
-// module.exports = Admin
+module.exports = Users

@@ -1,0 +1,28 @@
+{% extends '../template/template.twig' %}
+{% block content %}
+{% for error in errors %}
+            <div class="alert alert-danger col-md-12" role="alert">
+                {{error.message}}
+            </div>
+{% endfor %}
+<div class="container text-center">
+ <div class="row">
+            <div class="col-md-12">
+                <h1>Les films sortie dans le mois</h1>
+            </div>
+        </div>
+    <div class="row">
+       
+            {% for res in result.results %}
+            <div class="col-md-4" style="width: 18rem;">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">{{res.title}}</div>
+                        <a href="http://localhost:8080/movieDetails/{{res.id}}">
+                            <img class="card-img-top" src="https://image.tmdb.org/t/p/w500{{res.poster_path}}"/>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}

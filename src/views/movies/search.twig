@@ -1,0 +1,34 @@
+{% extends '../template/template.twig' %}
+{% block title %}Recherche - {% endblock %}
+{% block content %}
+<div class="container">
+    <form name="rechercher center-block" method="GET" action="/search" style="padding:20px">
+        <div class="input-group">
+            <input type="text" class="form-control" name="film" placeholder="Rechercher">
+            <div class="input-group-append">
+                <button class="btn btn-info btn-lg" type="submit">Rechercher</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="container text-center">
+        <div class="row">
+            {% for item in films.results %}
+            <div class="col-md-3 " style="width: 18rem;">
+                <div class="card mb-3 box-shadow">
+                    <div class="card-header">{{ item.title }}</div>
+                    <a href="http://localhost:8080/movieDetails/{{item.id}}">
+                        <img class="card-img-top" src="https://image.tmdb.org/t/p/w500{{item.poster_path}}" alt="{{ item.title }}" height="300" width="200">
+                    </a>
+                <div class="card-body">
+                    <p class="card-text">Note : {{ item.vote_average }}</p>
+                    <p class="card-text">Date de sortie : {{ item.release_date }}</p>
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    <div>
+
+</div>
+{% endblock %}
